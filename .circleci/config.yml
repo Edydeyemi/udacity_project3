@@ -121,7 +121,6 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
-            # exit 1
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-scan
@@ -141,7 +140,6 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --force
             npm audit --audit-level=critical
-            # exit 1
       - save_cache:
           paths: [backend/node_modules]
           key: backend-scan
@@ -160,7 +158,6 @@ jobs:
               --tags project=udapeople-backend\
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
-              # exit 1
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -169,7 +166,6 @@ jobs:
               --tags project=udapeople-frontend \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"  
-              exit 1
       - run:
           name: Add back-end ip to ansible inventory
           command: |
