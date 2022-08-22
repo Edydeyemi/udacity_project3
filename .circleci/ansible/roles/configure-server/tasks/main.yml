@@ -18,19 +18,19 @@
     npm install pm2 -g && pm2 update
     pm2 completion install
 
-- name: "Migrate Files"
-  become: true
-  copy:
-    src: ~/project/.circleci/artifact.tar.gz
-    dest: /home/ubuntu/
+# - name: "Migrate Files"
+#   become: true
+#   copy:
+#     src: ~/project/.circleci/artifact.tar.gz
+#     dest: /home/ubuntu/
 
-- name: "Build and Launch app"
-  become: true
-  shell: |
-    cd /home/ubuntu
-    tar xczf artifact.tar.gz
-    npm install
-    npm run build
-    pm2 stop all 
-    pm2 start npm --start
+# - name: "Build and Launch app"
+#   become: true
+#   shell: |
+#     cd /home/ubuntu
+#     tar xczf artifact.tar.gz
+#     npm install
+#     npm run build
+#     pm2 stop all 
+#     pm2 start npm --start
  
