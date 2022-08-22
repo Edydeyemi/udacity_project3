@@ -196,16 +196,16 @@ jobs:
               apk add --update git openssh-client
       - add_ssh_keys:
           fingerprints:
-            - "4a:00:93:0b:d5:8a:43:7c:50:ad:bf:35:4b:41:84:f7"
+            - "72:8b:6a:90:d3:78:af:e8:62:a6:b3:b8:61:70:d2:3e"
       - attach_workspace:
           at: ~/
           # at: .circleci/ansible
       - run:
           name: Install dependencies
           command: | 
+            apk add --no-cache python3 py3-pip
             apk add --update ansible
-            apk add --update gzip
-            apk add pip3
+            apk add --update gzip 
             pip install awscli
             # exit 1
       - run:
