@@ -205,7 +205,7 @@ jobs:
           command: | 
             apk add --update ansible
             apk add --update gzip
-            apk add pip3
+            apk add --no-cache python3 py3-pip
             pip install awscli
             # exit 1
       - run:
