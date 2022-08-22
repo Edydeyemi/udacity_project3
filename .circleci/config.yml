@@ -182,7 +182,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/ansible/
+            - project/.circleci/ansible/*
       # Here's where you will add some code to rollback on failure sdds
 
   configure-infrastructure:
@@ -194,7 +194,7 @@ jobs:
           fingerprints:
             - "4a:00:93:0b:d5:8a:43:7c:50:ad:bf:35:4b:41:84:f7"
       - attach_workspace:
-          at: .circleci/ansible/
+          at:  project/.circleci/ansible/
       - run:
           name: Install dependencies
           command: | 
@@ -208,7 +208,7 @@ jobs:
             # echo "previous dir is - "
             # pwd
             # ls
-            cd .circleci/ansible/
+            cd  project/.circleci/ansible/
             # echo "New working directory is- "
             # pwd
             ls
