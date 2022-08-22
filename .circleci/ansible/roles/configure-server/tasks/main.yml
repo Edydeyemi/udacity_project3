@@ -5,11 +5,12 @@
   apt:
     update_cache: yes
 
-- name: "Install NodeJS"
+- name: "Install NodeJS and NPM"
   become: true
-  shell: |
-    apt update
-    apt install nodejs npm
+  apt:
+    name: ["nodejs", "npm"]
+    state: latest
+    update_cache: yes 
 
 - name: "Install Pm2"
   become: true
