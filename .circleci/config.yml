@@ -208,7 +208,7 @@ jobs:
             # echo "previous dir is - "
             # pwd
             # ls
-            cd  project/.circleci/ansible/
+            cd  .circleci/ansible/
             # echo "New working directory is- "
             # pwd
             ls
