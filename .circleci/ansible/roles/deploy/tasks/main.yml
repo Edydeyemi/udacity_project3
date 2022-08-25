@@ -20,6 +20,8 @@
 
 - name: "Migrate Files"
   become: true
+  shell: |
+    mkdir /home/ubuntu/backend
   copy:
     src: ~/project/artifact.tar.gz
     dest: /home/ubuntu/backend
