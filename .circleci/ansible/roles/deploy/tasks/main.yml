@@ -37,5 +37,5 @@
     sudo npm install
     sudo npm run build
     sudo pm2 stop all 
-    sudo pm2 start npm --start
+    sudo pm2 start npm -- start
  
