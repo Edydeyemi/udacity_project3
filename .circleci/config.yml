@@ -362,9 +362,17 @@ jobs:
               --query "Reservations[*].Instances[*].PublicIpAddress" \
               --filters "Name=tag:Name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
+
+            echo "BackEnd IP is " ${BACKEND_IP}
             echo ${BACKEND_IP}
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
+            echo "the API API_URLvis = ${API_URL}"
+
+            echo " the APIURL is API_URL = ${API_URL}"
+            # echo ${BACKEND_IP}
+            # export API_URL="http://${BACKEND_IP}:3030"
+            # echo "API_URL = ${API_URL}"
       - run:
           name: Backend smoke test.
           command: |
