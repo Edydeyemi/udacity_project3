@@ -33,7 +33,7 @@
   become: true
   shell: |
     cd /home/ubuntu/backend
-    tar xczf artifact.tar.gz
+    sudo tar xvf artifact.tar.gz
     ls
     npm install
     npm run build
