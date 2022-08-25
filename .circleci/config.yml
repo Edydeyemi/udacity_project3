@@ -350,8 +350,11 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: |
-            apk add --update --no-cache tar gzip nodejs npm curl aws-cli
+          command: |          
+            apk add --update  --no-cache gzip tar
+            apk add --update  --no-cache curl
+            apk add --update  --no-cache nodejs npm 
+            pip install awscli
       - run:
           name: Get backend url
           command: |
