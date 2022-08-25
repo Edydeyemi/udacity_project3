@@ -336,7 +336,11 @@ jobs:
 
             # Archive the directory
             tar -C backend -czvf artifact.tar.gz .
+            pwd
+            ls
             cd .circleci/ansible
+            pwd
+            ls
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt 
             ANSIBLE_HOST_KEY_CHECKING=0 ansible-playbook -i inventory.txt deploy-backend.yml
@@ -417,19 +421,19 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
-      # - deploy-infrastructure
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     requires: [build-backend]
+      # - scan-backend:
+      #     requires: [build-backend]
+      # - scan-frontend:
+      #     requires: [build-frontend]
+      - deploy-infrastructure
+      # - deploy-infrastructure:
+      #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       # filters:
       #   branches:
       #     only: [test-feature-branch]
