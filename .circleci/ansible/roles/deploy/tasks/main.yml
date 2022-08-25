@@ -18,10 +18,13 @@
     npm install pm2 -g && pm2 update
     pm2 completion install
 
-- name: "Migrate Files"
+- name: "Create Folder"
   become: true
   shell: |
     mkdir /home/ubuntu/backend
+
+- name: "Migrate Files"
+  become: true
   copy:
     src: ~/project/artifact.tar.gz
     dest: /home/ubuntu/backend
