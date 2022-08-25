@@ -231,8 +231,8 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm install 
-            npm audit fix
+            sudo npm install -g npm
+            npm audit fix --force
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
@@ -243,7 +243,6 @@ jobs:
               echo "Migrations has completed successfully"               
               curl -v --insecure https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
-          # workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       # - destroy-environment:
 
   deploy-frontend:
