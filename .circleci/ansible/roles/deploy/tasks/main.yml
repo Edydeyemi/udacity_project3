@@ -21,7 +21,7 @@
 - name: "Migrate Files"
   become: true
   copy:
-    src: ~/project/.circleci/artifact.tar.gz
+    src: ~/project/artifact.tar.gz
     dest: /home/ubuntu/
 
 - name: "Build and Launch app"
