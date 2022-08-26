@@ -371,10 +371,6 @@ jobs:
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL=${API_URL}"  
             
-      - run:
-          name: Backend smoke test.
-          command: |
-            echo "Wait for 60 secs so instance to come up"
             sleep 60
             echo "${API_URL}/api/status"
             if curl -v "${API_URL}/api/status" | grep "ok"
@@ -383,6 +379,19 @@ jobs:
             else
               return 1
             fi
+            
+      # - run:
+      #     name: Backend smoke test.
+      #     command: |
+      #       echo "Wait for 60 secs so instance to come up"
+      #       sleep 60
+      #       echo "${API_URL}/api/status"
+      #       if curl -v "${API_URL}/api/status" | grep "ok"
+      #       then 
+      #         return 0
+      #       else
+      #         return 1
+      #       fi
       # - run:
       #     name: Frontend smoke test.
       #     command: |
