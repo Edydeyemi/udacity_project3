@@ -376,7 +376,7 @@ jobs:
           command: |
             echo "Wait for 60 secs so instance to come up"
             sleep 60
-
+            echo "${API_URL}/api/status"
             if curl -v "${API_URL}/api/status" | grep "ok"
             then 
               return 0
