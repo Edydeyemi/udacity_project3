@@ -351,34 +351,43 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update --no-cache tar gzip nodejs npm curl aws-cli
+            apk add --update  --no-cache gzip
+            apk add --update  --no-cache tar
+            apk add --update  --no-cache curl
+            apk add --update  --no-cache nodejs npm
+            pip install awscli
       - run:
-          name: Get backend url
+          name: Run Backend Smoke Test
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
               --query "Reservations[*].Instances[*].PublicIpAddress" \
               --filters "Name=tag:Name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
-            echo ${BACKEND_IP}
-            export API_URL="http://${BACKEND_IP}:3030"
-            echo "API_URL = ${API_URL}"
-      - run:
-          name: Backend smoke test.
-          command: |
-            echo "Wait for 60 secs so instance to come up"
+            export BACKEND=$(echo $BACKEND_IP | grep -o '[^ ]*$')  
+            echo $BACKEND
+            export API_URL="http://${BACKEND}:3030"
+            echo "${API_URL}" 
+            
+            # Ping backend url
             sleep 60
-
             if curl -v "${API_URL}/api/status" | grep "ok"
             then 
               return 0
             else
               return 1
-            fi
-      # - run:
-      #     name: Frontend smoke test.
-      #     command: |
-      #       # your code here
-      # # Here's where you will add some code to rollback on failure
+            fi 
+      - run:
+          name: Run Front-end Smoke Test
+          command: |
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
+            then
+                # Change this to 0 after the job fails
+              return 1
+            else
+              return 1
+            fi            
 
   # cloudfront-update:
   #   docker:
