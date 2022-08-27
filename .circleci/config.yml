@@ -290,8 +290,8 @@ jobs:
             aws s3 cp dist s3://udapeople-udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       # - destroy-environment
       #     # id: ${CIRCLE_WORKFLOW_ID:0:7}
-      # - revert-migrations:
-      #     id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       # Here's where you will add some code to rollback on failure
 
   deploy-backend:
@@ -347,6 +347,8 @@ jobs:
             ANSIBLE_HOST_KEY_CHECKING=0 ansible-playbook -i inventory.txt deploy-backend.yml
 
         # Here's where you will add some code to rollback on failure
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   smoke-test:
     docker:
