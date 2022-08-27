@@ -24,7 +24,8 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)
+            echo "https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>"
+            $SUCCESS=$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)
             # Logic for reverting the database state
             if (( $SUCCESS == 1 ));
             then
@@ -238,9 +239,11 @@ jobs:
           name: Send migration status to kvdb.io OR memstash.io
           command: |
             cd backend
+            cat migrations_dump.txt
             if grep -q "has been executed successfully." migrations_dump.txt
             then  
-              echo "Migrations has completed successfully"               
+              echo "Migrations has completed successfully"  
+              echo "https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_${CIRCLE_WORKFLOW_ID:0:7}"             
               curl -v --insecure https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
       # - destroy-environment:
