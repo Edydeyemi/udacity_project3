@@ -388,7 +388,7 @@ jobs:
             else
               return 1
             fi  
-      - revert-mirations
+      - revert-migrations
       # - destroy_environment          
 
   # cloudfront-update:
