@@ -237,6 +237,7 @@ jobs:
       - run:
           name: Send migration status to kvdb.io OR memstash.io
           command: |
+            cd backend
             if grep -q "has been executed successfully." migrations_dump.txt
             then  
               echo "Migrations has completed successfully"               
