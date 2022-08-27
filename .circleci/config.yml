@@ -382,8 +382,7 @@ jobs:
           command: |
             echo ${CIRCLE_WORKFLOW_ID:0:7}
             $base = "us-west-2"
-            echo $base
-            echo "s3-website-us-west-2.amazonaws.com/#/employees"
+            echo "the base is $base" 
             # URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-west-2.amazonaws.com/#/employees"   
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-2.amazonaws.com/#/employees"      
             echo ${URL} 
