@@ -515,9 +515,12 @@ jobs:
             export STACKS=$(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
             --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
             export prefix = "udapeople-frontend-"
-            export pruned =  ${STACKS} | grep -oP "^$prefix\K.*"
-            echo ${STACKS}
-            echo pruned
+            echo $prefix
+            export pruned =  ${STACKS} | grep -oP "^$prefix\K.*"     
+            echo $pruned
+          
+            # echo ${STACKS}
+            # echo pruned
             # echo Stack names: "${STACKS[@]}" 
             
            
