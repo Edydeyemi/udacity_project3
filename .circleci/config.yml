@@ -517,7 +517,7 @@ jobs:
             export PREFIXNAME="udapeople-frontend-"
             echo "${PREFIXNAME}"
             # export pruned =  ${STACKS} | grep -oP "^${PREFIXNAME}\K.*"     
-            export pruned =  ${STACKS/#$PREFIXNAME}
+            export pruned = expr "${STACKS}" : "${PREFIXNAME}\(.*\)"
             # ${STACKS} | grep -oP "^${PREFIXNAME}\K.*"     
             echo ${pruned}
           
