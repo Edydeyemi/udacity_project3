@@ -516,8 +516,8 @@ jobs:
             --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
             export PREFIXNAME="udapeople-frontend-"
             echo "${PREFIXNAME}"
-            # export pruned =  ${STACKS} | grep -oP "^$prefix\K.*"     
-            # echo $pruned
+            export pruned =  ${STACKS} | grep -oP "^${PREFIXNAME}\K.*"     
+            echo ${pruned}
           
             # echo ${STACKS}
             # echo pruned
