@@ -1,0 +1,138 @@
+sudo useradd --no-create-home prometheus
+sudo mkdir /etc/prometheus
+sudo mkdir /var/lib/prometheus
+
+wget https://github.com/prometheus/prometheus/releases/download/v2.38.0/prometheus-2.38.0.linux-amd64.tar.gz
+tar xvfz prometheus-2.38.0.linux-amd64.tar.gz
+
+sudo cp prometheus-2.38.0.linux-amd64/prometheus /usr/local/bin
+sudo cp prometheus-2.38.0.linux-amd64/promtool /usr/local/bin/
+sudo cp -r prometheus-2.38.0.linux-amd64/consoles /etc/prometheus
+sudo cp -r prometheus-2.38.0.linux-amd64/console_libraries /etc/prometheus
+sudo cp prometheus-2.38.0.linux-amd64/promtool /usr/local/bin/
+rm -rf prometheus-2.38.0.linux-amd64.tar.gz prometheus-2.38.0.linux-amd64
+
+
+sudo nano /etc/prometheus/prometheus.yml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s 
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ['localhost']
+
+rule_files:
+  - /etc/prometheus/rules.yml
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'udapeople'
+    static_configs:
+      - targets: ['ip-172-31-3-34.us-west-2.compute.internal:9090']
+
+
+sudo nano /etc/systemd/system/prometheus.service
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+    --config.file /etc/prometheus/prometheus.yml \
+    --storage.tsdb.path /var/lib/prometheus/ \
+    --web.console.templates=/etc/prometheus/consoles \
+    --web.console.libraries=/etc/prometheus/console_libraries
+
+[Install]
+WantedBy=multi-user.target
+
+
+sudo chown prometheus:prometheus /etc/prometheus
+sudo chown prometheus:prometheus /usr/local/bin/prometheus
+sudo chown prometheus:prometheus /usr/local/bin/promtool
+sudo chown -R prometheus:prometheus /etc/prometheus/consoles
+sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
+sudo chown -R prometheus:prometheus /var/lib/prometheus
+
+sudo systemctl daemon-reload
+sudo systemctl enable prometheus
+sudo systemctl restart prometheus
+sudo systemctl status prometheus
+
+
+
+sudo useradd -M -r -s /bin/false alertmanager
+sudo mkdir /var/lib/alertmanager
+sudo mkdir /etc/alertmanager
+
+wget https://github.com/prometheus/alertmanager/releases/download/v0.24.0/alertmanager-0.24.0.linux-amd64.tar.gz
+tar xvfz alertmanager-0.24.0.linux-amd64.tar.gz
+
+sudo cp alertmanager-0.24.0.linux-amd64/alertmanager /usr/local/bin
+sudo cp alertmanager-0.24.0.linux-amd64/amtool /usr/local/bin/
+sudo cp alertmanager-0.24.0.linux-amd64/alertmanager.yml /etc/alertmanager
+sudo mkdir /var/lib/alertmanager
+
+sudo chown alertmanager:alertmanager /etc/alertmanager/alertmanager.yml
+sudo chown alertmanager:alertmanager /usr/local/bin/alertmanager
+rm -rf alertmanager*
+
+sudo nano /etc/alertmanager/alertmanager.yml
+
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: email-me'
+receivers:
+  - name: 'email-me'
+    email_configs:
+    - to: 'test@edwardbabatunde.com'
+      from: 'test@edwardbabatunde.com'
+      smarthost: mail.edwardbabatunde.com:587
+      auth_username: 'test@edwardbabatunde.com'
+      auth_identity: 'test@edwardbabatunde.com'
+      auth_password: 'Sa!Baba@123' 
+
+
+amtool check-config /etc/alertmanager/alertmanager.yml
+
+sudo nano /etc/systemd/system/alertmanager.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now alertmanager.service
+sudo systemctl status alertmanager.service
+
+sudo nano /etc/prometheus/rules.yml
+cat /etc/prometheus/rules.yml
+
+groups:
+- name: Down
+  rules:
+    - alert: InstanceDown
+      expr: up == 0
+      for: 2m
+      labels:
+        severity: 'critical'
+        annotations:
+        summary: "Instance (instance {{ $labels.instance }}) is down."
+        description: " (instance {{ $labels.instance }}) has been offline for more than 2 mintes."
+
+
+sudo chown -R prometheus:prometheus /etc/prometheus
+
+sudo systemctl daemon-reload
+sudo systemctl restart prometheus.service
+sudo systemctl restart alertmanager.service
+sudo systemctl status prometheus.service
+sudo systemctl status alertmanager.service
