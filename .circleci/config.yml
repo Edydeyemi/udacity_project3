@@ -457,26 +457,74 @@ jobs:
       - run:
           name: Get old stack workflow id
           command: |
-            export OldWorkflowID=$(aws cloudformation \
-            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-            --no-paginate --output text)
-            echo OldWorkflowID: "${OldWorkflowID}"
-            echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
-
+            # export OldWorkflowID=$(aws cloudformation \
+            # list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            # --no-paginate --output text)
+            # echo OldWorkflowID: "${OldWorkflowID}"
+            # echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+            # Fetch the stack names        
+            
+              
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-            --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
-            echo Stack names: "${STACKS[@]}"          
+                    --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
+            echo Stack names: "${STACKS[@]}" 
+
+            cat ~/project/OldWorkflowID.txt
+            export OldWorkflowID=$(cat ~/project/OldWorkflowID.txt)
+            echo OldWorkflowID: "${OldWorkflowID}"
+
+            # # your code here
+            # export OldWorkflowID=${OldWorkflowID}
+            # export STACKS=["${STACKS[@]}"]
       - run:
           name: Remove old stacks and files
           command: |
             export OldWorkflowID=$(cat ~/project/OldWorkflowID.txt)
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
+              echo "We have stacks to delete"
               aws s3 rm "s3://udapeople-udapeople-frontend-${OldWorkflowID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
               echo "Old Stacks deleted"
+            else  
+              echo "No redundant stacks to delete"
             fi
+
+  # cleanup:
+  #   docker:
+  #     - image: python:3.7-alpine3.11
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           apk add --update  --no-cache gzip
+  #           apk add --update  --no-cache tar 
+  #           pip install awscli
+  #     - run:
+  #         name: Get old stack workflow id
+  #         command: |
+  #           export OldWorkflowID=$(aws cloudformation \
+  #           list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+  #           --no-paginate --output text)
+  #           echo OldWorkflowID: "${OldWorkflowID}"
+  #           echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+
+  #           export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+  #           --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
+  #           echo Stack names: "${STACKS[@]}"          
+  #     - run:
+  #         name: Remove old stacks and files
+  #         command: |
+  #           export OldWorkflowID=$(cat ~/project/OldWorkflowID.txt)
+  #           if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
+  #           then
+  #             aws s3 rm "s3://udapeople-udapeople-frontend-${OldWorkflowID}" --recursive
+  #             aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+  #             aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+  #             echo "Old Stacks deleted"
+  #           fi
 
 workflows:
   default:
