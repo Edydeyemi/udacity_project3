@@ -33,7 +33,7 @@ commands:
             echo "here is SUCCESS or $SUCCESS" 
             echo ${controlNo}
             echo $controlNo " is here "
-            if (( $SUCCESS == ${controlNo} ));
+            if ($SUCCESS == 1);
             then
                 echo "pls rollback migration"
                 cd ~/project/backend
