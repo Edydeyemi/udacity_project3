@@ -27,19 +27,19 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)
-            # Logic for reverting the database state
-            echo "status IS $SUCCESS" 
+            # SUCCESS=$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)
+            # # Logic for reverting the database state
+            # echo "status IS $SUCCESS" 
             
-            # if curl -v "$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)" | grep "1"
-            # then
-            #     echo "pls rollback migration"
-            #     cd ~/project/backend
-            #     npm install
-            #     npm run migration:revert
-            # else  
-            #     echo "no migrations to rollback"
-            # fi
+            if curl -v "$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)" | grep "1"
+            then
+                echo "pls rollback migration"
+                cd ~/project/backend
+                npm install
+                npm run migration:revert
+            else  
+                echo "no migrations to rollback"
+            fi
 
             # if (( $SUCCESS == "1" ));
             # then
@@ -574,17 +574,17 @@ workflows:
       #         only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      - run-migrations
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
-      - smoke-test:
+      # - run-migrations
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
           requires: [run-migrations]
       # - smoke-test:
-      #     requires: [deploy-backend, deploy-frontend]
+      #     requires: [run-migrations]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
       # - cleanup
