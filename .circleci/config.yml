@@ -29,7 +29,17 @@ commands:
           command: |
             SUCCESS=$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)
             # Logic for reverting the database state
-            echo "here is SUCCESS or $SUCCESS" 
+            echo "status IS $SUCCESS" 
+            
+            if curl -v "$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)" | grep "1"
+            then
+                echo "pls rollback migration"
+                cd ~/project/backend
+                npm install
+                npm run migration:revert
+            else  
+                echo "no migrations to rollback"
+            fi
             if (( $SUCCESS == "1" ));
             then
                 echo "pls rollback migration"
