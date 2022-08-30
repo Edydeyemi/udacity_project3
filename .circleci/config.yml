@@ -31,24 +31,25 @@ commands:
             # Logic for reverting the database state
             echo "status IS $SUCCESS" 
             
-            if curl -v "$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)" | grep "1"
-            then
-                echo "pls rollback migration"
-                cd ~/project/backend
-                npm install
-                npm run migration:revert
-            else  
-                echo "no migrations to rollback"
-            fi
-            if (( $SUCCESS == "1" ));
-            then
-                echo "pls rollback migration"
-                cd ~/project/backend
-                npm install
-                npm run migration:revert
-            else  
-                echo "no migrations to rollback"
-            fi
+            # if curl -v "$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)" | grep "1"
+            # then
+            #     echo "pls rollback migration"
+            #     cd ~/project/backend
+            #     npm install
+            #     npm run migration:revert
+            # else  
+            #     echo "no migrations to rollback"
+            # fi
+
+            # if (( $SUCCESS == "1" ));
+            # then
+            #     echo "pls rollback migration"
+            #     cd ~/project/backend
+            #     npm install
+            #     npm run migration:revert
+            # else  
+            #     echo "no migrations to rollback"
+            # fi
 
 jobs:
   build-frontend:
@@ -555,32 +556,34 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
-      # - deploy-infrastructure
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [master]
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     requires: [build-backend]
+      # - scan-backend:
+      #     requires: [build-backend]
+      # - scan-frontend:
+      #     requires: [build-frontend]
+      - deploy-infrastructure
+      # - deploy-infrastructure:
+      #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      #     filters:
+      #       branches:
+      #         only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
-      - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
+      - run-migrations
+      # - run-migrations:
+      #     requires: [configure-infrastructure]
+      # - deploy-frontend:
+      #     requires: [run-migrations]
+      # - deploy-backend:
+      #     requires: [run-migrations]
+      - smoke-test
+      # - smoke-test:
+      #     requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
       # - cleanup
