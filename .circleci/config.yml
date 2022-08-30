@@ -31,8 +31,8 @@ commands:
             SUCCESS=$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)
             # Logic for reverting the database state
             echo "here is SUCCESS or $SUCCESS" 
-            echo $isTrue
-            if (( $SUCCESS == $isTrue ));
+            echo ${isTrue}
+            if (( $SUCCESS == ${isTrue} ));
             then
                 echo "pls rollback migration"
                 cd ~/project/backend
