@@ -32,7 +32,7 @@ commands:
             # Logic for reverting the database state
             echo "here is SUCCESS or $SUCCESS" 
             echo ${controlNo}
-            if (( $SUCCESS == "${controlNo}" ));
+            if (( $SUCCESS == "$controlNo" ));
             then
                 echo "pls rollback migration"
                 cd ~/project/backend
