@@ -30,15 +30,16 @@ commands:
             SUCCESS=$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)
             # Logic for reverting the database state
             echo "status IS $SUCCESS" 
-            
+            echo "$(https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)"
+
             if curl -v "$(curl --insecure  https://kvdb.io/NZrFCGtxSFcjgKnJBPWGHY/migration_<< parameters.workflow_id >>)" | grep "1"
             then
-                echo "pls rollback migration"
+                echo "pls rollback existing migration"
                 cd ~/project/backend
                 npm install
                 npm run migration:revert
             else  
-                echo "no migrations to rollback"
+                echo "no migrations to rollback HERE."
             fi
             
             if (( $SUCCESS == "1" ));
@@ -216,7 +217,7 @@ jobs:
             apk add --update git openssh-client
       - add_ssh_keys:
           fingerprints:
-            - "75:77:c0:2d:85:20:be:fb:06:0c:53:e6:28:3c:71:39"
+            - "72:8b:6a:90:d3:78:af:e8:62:a6:b3:b8:61:70:d2:3e"
       - attach_workspace:
           at: ~/
       - run:
@@ -321,7 +322,7 @@ jobs:
           keys: [backend-build1]
       - add_ssh_keys:
           fingerprints:
-            - "75:77:c0:2d:85:20:be:fb:06:0c:53:e6:28:3c:71:39"
+            - "72:8b:6a:90:d3:78:af:e8:62:a6:b3:b8:61:70:d2:3e"
       - attach_workspace:
           at: ~/
       - run:
@@ -408,7 +409,7 @@ jobs:
       - run:
           name: Run Front-end Smoke Test
           command: |
-            URL="http://udapeople-udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-west-2.amazonaws.com/#/employees"
+            URL="http://udapeople-udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-west-2.amazonaws.com/#/employees"
             echo ${URL}
             if curl -s ${URL} | grep "Welcome"
             then

@@ -32,8 +32,13 @@ scrape_configs:
       - targets: ['localhost:9090']
 
   - job_name: 'udapeople'
+    ec2_sd_configs:
+      - region: us-west-2
+        access_key: 
+        secret_key: 
+        port: 9100    
     static_configs:
-      - targets: ['ip-172-31-3-34.us-west-2.compute.internal:9090']
+      - targets: ['ec2-34-222-139-247.us-west-2.compute.amazonaws.com:9100']
 
 
 sudo nano /etc/systemd/system/prometheus.service
@@ -80,35 +85,54 @@ tar xvfz alertmanager-0.24.0.linux-amd64.tar.gz
 sudo cp alertmanager-0.24.0.linux-amd64/alertmanager /usr/local/bin
 sudo cp alertmanager-0.24.0.linux-amd64/amtool /usr/local/bin/
 sudo cp alertmanager-0.24.0.linux-amd64/alertmanager.yml /etc/alertmanager
-sudo mkdir /var/lib/alertmanager
 
-sudo chown alertmanager:alertmanager /etc/alertmanager/alertmanager.yml
-sudo chown alertmanager:alertmanager /usr/local/bin/alertmanager
-rm -rf alertmanager*
 
 sudo nano /etc/alertmanager/alertmanager.yml
-
 
 route:
   group_by: ['alertname']
   group_wait: 10s
   group_interval: 10s
   repeat_interval: 1h
-  receiver: email-me'
+  receiver: 'email-me'
 receivers:
   - name: 'email-me'
     email_configs:
-    - to: 'test@edwardbabatunde.com'
-      from: 'test@edwardbabatunde.com'
-      smarthost: mail.edwardbabatunde.com:587
-      auth_username: 'test@edwardbabatunde.com'
-      auth_identity: 'test@edwardbabatunde.com'
-      auth_password: 'Sa!Baba@123' 
+    - to: 'naijamuse@gmail.com'
+      from: 'naijamuse@gmail.com'
+      smarthost: smtp.gmail.com:587
+      auth_username: 'naijamuse@gmail.com'
+      auth_identity: 'naijamuse@gmail.com'
+      auth_password: 'pgsuysoswvndeyts' 
 
+
+sudo chown alertmanager:alertmanager /etc/alertmanager/alertmanager.yml
+sudo chown alertmanager:alertmanager /usr/local/bin/alertmanager
+rm -rf alertmanager*
 
 amtool check-config /etc/alertmanager/alertmanager.yml
 
 sudo nano /etc/systemd/system/alertmanager.service
+
+[Unit]
+Description=Alert Manager
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=prometheus
+Group=prometheus
+ExecStart=/usr/local/bin/alertmanager \
+  --config.file=/etc/alertmanager/alertmanager.yml \
+  --storage.path=/var/lib/alertmanager
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+
 sudo systemctl daemon-reload
 sudo systemctl enable --now alertmanager.service
 sudo systemctl status alertmanager.service
