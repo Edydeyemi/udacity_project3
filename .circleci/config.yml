@@ -42,15 +42,15 @@ commands:
             #     echo "no migrations to rollback HERE."
             # fi
             
-            if (( $SUCCESS == "1" ));
-            then
-                echo "pls rollback migration"
-                cd ~/project/backend
-                npm install
-                npm run migration:revert
-            else  
-                echo "no migrations to rollback"
-            fi
+            # if (( $SUCCESS == "1" ));
+            # then
+              echo "pls rollback migration"
+              cd ~/project/backend
+              npm install
+              npm run migration:revert
+            # else  
+            #     echo "no migrations to rollback"
+            # fi
 
 jobs:
   build-frontend:
@@ -557,22 +557,22 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     requires: [build-backend]
+      # - scan-backend:
+      #     requires: [build-backend]
+      # - scan-frontend:
+      #     requires: [build-frontend]
       # - deploy-infrastructure
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [master]
+      # - deploy-infrastructure:
+      #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      #     filters:
+      #       branches:
+      #         only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
