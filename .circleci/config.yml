@@ -49,7 +49,7 @@ commands:
               pwd
               ls
               npm install
-              npm run migration:revert
+              npm run migrations:revert
             # else  
             #     echo "no migrations to rollback"
             # fi
