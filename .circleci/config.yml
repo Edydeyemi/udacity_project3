@@ -528,8 +528,8 @@ jobs:
             --no-paginate --output text)
             export Merged="udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
 
-            echo "$Merged"
-            echo "${OldWorkflowID}"
+            echo "New stack is $Merged"
+            echo "Old Stacks are ${OldWorkflowID}"
 
             # if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             if [[ "$Merged" != "${OldWorkflowID}" ]]
