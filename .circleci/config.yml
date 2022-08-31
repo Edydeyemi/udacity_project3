@@ -46,6 +46,8 @@ commands:
             # then
               echo "pls rollback migration"
               cd ~/project/backend
+              pwd
+              ls
               npm install
               npm run migration:revert
             # else  
@@ -282,7 +284,7 @@ jobs:
             apk add --update ansible
             apk add --update gzip
             apk add --update tar
-            apk add --update nodejs npm
+            apk add --update nodejs npm 
             apk add --update  --no-cache curl
             pip install awscli
             # exit 1
