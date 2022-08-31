@@ -37,7 +37,7 @@ commands:
             #     echo "pls rollback existing migration"
             #     cd ~/project/backend
             #     npm install
-            #     npm run migration:revert
+            #     npm run migrations:revert
             # else  
             #     echo "no migrations to rollback HERE."
             # fi
@@ -569,7 +569,7 @@ workflows:
       #     requires: [build-backend]
       # - scan-frontend:
       #     requires: [build-frontend]
-      # - deploy-infrastructure
+      - deploy-infrastructure
       # - deploy-infrastructure:
       #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       #     filters:
