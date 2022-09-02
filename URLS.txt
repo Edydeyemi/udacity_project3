@@ -1,1 +1,4 @@
 https://github.com/Edydeyemi/udacity_project3 
+http://d209qfu275imj6.cloudfront.net/
+http://udapeople-udapeople-frontend-f87200f.s3-website-us-east-1.amazonaws.com
+
