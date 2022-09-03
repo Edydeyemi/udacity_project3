@@ -404,7 +404,7 @@ jobs:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       # - destroy_environment
 
-  cloudfront-update:
+cloudfront-update:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -434,12 +434,12 @@ jobs:
               --parameter-overrides WorkflowID="udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople-frontend
               echo "current ID is ${CIRCLE_WORKFLOW_ID:0:7}"
-              echo "Old ID is" cat ~/project/OldWorkflowID.txt
+              echo "Old ID is" 
+              cat ~/project/OldWorkflowID.txt
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}      
       - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
   cleanup:
     docker:
       - image: python:3.7-alpine3.11
