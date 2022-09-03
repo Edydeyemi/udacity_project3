@@ -7,3 +7,6 @@ http://d209qfu275imj6.cloudfront.net/
 
 Prometheus Server
 http://ec2-34-221-204-237.us-west-2.compute.amazonaws.com:9090/targets?search=
+
+S3 website URL
+http://udapeople-udapeople-frontend-14a837f.s3-website-us-east-1.amazonaws.com
